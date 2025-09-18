@@ -1,0 +1,64 @@
+{
+  "name": "device-inventory-system",
+  "version": "1.0.0",
+  "description": "نظام مخزن الأجهزة باستخدام Electron.js و Microsoft Access",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "concurrently \"npm run dev:react\" \"wait-on http://localhost:3000 && electron .\"",
+    "dev:react": "cd frontend && npm start",
+    "build": "cd frontend && npm run build",
+    "build:electron": "electron-builder",
+    "dist": "npm run build && npm run build:electron"
+  },
+  "keywords": [
+    "electron",
+    "react",
+    "access",
+    "inventory",
+    "devices"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "electron": "^27.0.0",
+    "electron-builder": "^24.6.4",
+    "wait-on": "^7.2.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "sqlite3": "^5.1.7"
+  },
+  "build": {
+    "appId": "com.example.device-inventory",
+    "productName": "نظام مخزن الأجهزة",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "backend/**/*",
+      "frontend/build/**/*",
+      "database/**/*",
+      "node_modules/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "database",
+        "to": "database"
+      }
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}
