@@ -108,6 +108,14 @@ ipcMain.handle("get-devices", async () => {
     return await deviceService.getAllDevices();
   } catch (error) {
     console.error("Error getting devices:", error);
+    // إرجاع مصفوفة فارغة بدلاً من رمي الخطأ
+    if (
+      error.message.includes("SQLITE_CANTOPEN") ||
+      error.message.includes("unable to open database file")
+    ) {
+      console.log("Database file not accessible, returning empty array");
+      return [];
+    }
     throw error;
   }
 });
@@ -118,6 +126,13 @@ ipcMain.handle("add-device", async (event, deviceData) => {
     return await deviceService.addDevice(deviceData);
   } catch (error) {
     console.error("Error adding device:", error);
+    if (
+      error.message.includes("SQLITE_CANTOPEN") ||
+      error.message.includes("unable to open database file")
+    ) {
+      console.log("Database file not accessible, cannot add device");
+      return { success: false, error: "Database not accessible" };
+    }
     throw error;
   }
 });
@@ -128,6 +143,13 @@ ipcMain.handle("update-device", async (event, id, deviceData) => {
     return await deviceService.updateDevice(id, deviceData);
   } catch (error) {
     console.error("Error updating device:", error);
+    if (
+      error.message.includes("SQLITE_CANTOPEN") ||
+      error.message.includes("unable to open database file")
+    ) {
+      console.log("Database file not accessible, cannot update device");
+      return { success: false, error: "Database not accessible" };
+    }
     throw error;
   }
 });
@@ -138,6 +160,13 @@ ipcMain.handle("delete-device", async (event, id) => {
     return await deviceService.deleteDevice(id);
   } catch (error) {
     console.error("Error deleting device:", error);
+    if (
+      error.message.includes("SQLITE_CANTOPEN") ||
+      error.message.includes("unable to open database file")
+    ) {
+      console.log("Database file not accessible, cannot delete device");
+      return { success: false, error: "Database not accessible" };
+    }
     throw error;
   }
 });
